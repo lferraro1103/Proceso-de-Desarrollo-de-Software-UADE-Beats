@@ -1,19 +1,34 @@
-# Corrección de código — Clase 4: Bad Smells
+# Corrección de código — Clase 5: GRASP
 
 Módulo: UADE Beats — Acceso a eventos en vivo
 
-## 1. Herencia
-
-`Usuario` y `Artista` son dos tipos de cuenta dentro de la plataforma, cada uno con datos de identidad y autenticación propios (identificador, nombre de cuenta, contraseña y estado de la cuenta). Para no duplicar esos atributos y su comportamiento en dos clases distintas, se define una clase base `Cuenta` de la cual ambas heredan. El tipo de cuenta se modela con el enumerado `TipoUsuario` (USUARIO, ADMINISTRADOR, ARTISTA), heredado también desde `Cuenta`. Un administrador se representa como un `Usuario` cuyo `TipoUsuario` es ADMINISTRADOR, sin necesidad de una clase adicional que no aportaría atributos propios.
-
-## 2. Bad smells corregidos
+## 1. Bad smells corregidos
 
 | Smell | Descripción | Solución aplicada |
 |---|---|---|
-| Código duplicado | La construcción de un evento "placeholder" para registrar intentos de acceso sin evento real se repetía en dos métodos de `GestorEventosEnVivo` | Se extrajo el método `eventoDesconocido()`, reutilizado en ambos casos |
-| Código duplicado | El filtrado de eventos disponibles para expulsar usuarios repetía la misma lógica que el filtrado usado para cambiar el estado de un evento | Se unificó bajo un mismo método parametrizado por la acción a realizar |
-| God Class | La clase `App` concentraba el menú de consola, la lectura de datos, las validaciones, la construcción de entidades y la persistencia | Se distribuyeron las responsabilidades en las clases `ConsoleIO`, `DatosIniciales` y `MenuAcciones`, dejando a `App` solo el inicio del programa y el despacho de opciones |
-| Método largo | La creación manual de un evento mezclaba la selección del artista, la lectura de datos y la construcción del objeto en un único método | Se dividió en métodos independientes para cada paso |
-| Método largo | El registro de un usuario mezclaba la lectura y validación del nombre de cuenta con el resto del alta | Se separó la validación del nombre de cuenta en un método propio |
-| Parámetros largos | El constructor del recital recibía once parámetros individuales | Se agrupan los datos propios del recital en un objeto `DatosRecital` |
-| Nombre poco representativo | La condición para determinar el acceso prioritario de un usuario se expresaba directamente como comparación de su plan de suscripción | Se incorporó el método `tieneAccesoPrioritario()` en `Usuario`, con un nombre que expresa la responsabilidad |
+| Contrato sin efecto | `Usuario.actualizarPerfil()` y `Artista.actualizarInformacionArtistica()`, en su versión sin argumentos, no realizaban ninguna operación real | Se eliminaron ambos métodos |
+| Responsabilidad de entrada/salida en el modelo | `RegistroAcceso` imprimía por consola el resultado de un intento de acceso, mezclando el modelo de dominio con la interfaz | Se eliminó esa responsabilidad de `RegistroAcceso`; la comunicación del resultado queda a cargo de la clase que atiende la interfaz |
+
+## 2. Patrones GRASP aplicados
+
+### Experto en información
+
+Cada clase valida aquello sobre lo que tiene la información necesaria. `RecitalEnVivo` valida su propia disponibilidad, capacidad y usuarios conectados; `AccesoEvento` valida la autorización del usuario y la compatibilidad de su plan de suscripción.
+
+### Creador
+
+La asociación entre `Evento` y `Artista` se establece en un único punto: el método `Evento.agregarArtista`. De esta forma la clase encargada de mantener la colección de artistas asociados es también la responsable de crear la relación, evitando que se duplique desde distintos lugares del sistema.
+
+### Controlador
+
+`GestorEventosEnVivo` centraliza la recepción de los eventos del sistema (iniciar, pausar, reanudar, finalizar y cancelar un evento; solicitar ingreso; expulsar un usuario) y coordina su ejecución delegando en las entidades correspondientes. La interfaz de consola y la interfaz gráfica solicitan estas operaciones al gestor en lugar de invocar directamente los métodos de las entidades del dominio.
+
+### Alta cohesión
+
+Cada clase mantiene una única responsabilidad bien definida. `RegistroAcceso` conserva únicamente los datos del registro de acceso; la comunicación del resultado al usuario queda a cargo de la interfaz correspondiente.
+
+### Bajo acoplamiento
+
+Al centralizar las operaciones en el gestor y mantener a cada entidad responsable únicamente de su propia información, las interfaces de consola y gráfica dependen exclusivamente del gestor, sin necesidad de conocer las reglas internas de las entidades del dominio.
+
+Los diagramas de interacción correspondientes a cada patrón se encuentran en `DIAGRAMAS_GRASP.md`.
