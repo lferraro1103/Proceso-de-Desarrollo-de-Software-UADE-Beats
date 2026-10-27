@@ -11,7 +11,7 @@ Se incorpora Strategy para la visibilidad de eventos, conservando permisos, tran
 - [PNG](TP/Grupo9_POO_Diagramas_Pdf/imagenes/clases-completo-paquetes.png).
 - [PDF](<TP/Grupo9_POO_Diagramas_Pdf/Diagrama de clase por paquetes.pdf>) ([oscuro](<TP/Grupo9_POO_Diagramas_Pdf/Diagrama de clase por paquetes (oscuro).pdf>)).
 
-Todos corresponden al mismo modelo: los 94 tipos del código agrupados por paquete, con atributos, métodos, cardinalidades y líneas ortogonales. La documentación y los informes están en [docs/iteracion-4/](docs/iteracion-4/README.md).
+Todos corresponden al mismo modelo: los 94 tipos del código agrupados por paquete, con atributos, métodos, cardinalidades y líneas ortogonales. El informe y la presentación de la iteración están en [docs/26-10-iteracion-4](docs/26-10-iteracion-4).
 
 ![Logo de UADE Beats](logo.png)
 
