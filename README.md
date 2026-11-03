@@ -1,6 +1,6 @@
 # Iteración final - UADE Beats
 
-Rama: `iteracion-final`. Parte de `iteracion-4` sin cambios en el código.
+Rama: `iteracion-final`. Parte de `iteracion-4`.
 
 Esta iteración reemplaza los diagramas de clases anteriores (el completo por paquetes y las siete vistas parciales) por un único diagrama de clases corregido según las observaciones de la cátedra:
 
@@ -12,11 +12,22 @@ Esta iteración reemplaza los diagramas de clases anteriores (el completo por pa
 | Dirección de las flechas | La flecha indica que una clase conoce a la otra y no al revés. La única relación bidireccional del código, `Evento` ↔ `Artista`, va sin flechas. |
 | Relaciones faltantes | Se agregaron las que existían en el código y no figuraban (por ejemplo `AccesoEvento` → `PlanSuscripcion`, `EstadoLocal` → `Usuario`/`Evento`, `ControlAcceso` «crea» `AccesoEvento` y las clases concretas que crea `Arranque`). |
 
+Además hay tres cambios chicos en el código:
+
+| Cambio | Motivo |
+|---|---|
+| Se quita el atributo `exclusivo` de los eventos | No se usaba en ninguna regla |
+| Los eventos sin video propio usan el video de demostración | Así toda transmisión muestra algo |
+| El administrador ya no solicita ingresos | No tiene sentido que el administrador entre a un recital |
+
+También se rehicieron los diagramas GRASP sobre el código actual ([Diagramas GRASP.pdf](<TP/Grupo9_POO_Diagramas_Pdf/Diagramas GRASP.pdf>)) y el diagrama de secuencia de la transmisión, que ahora pasa por `ControlTransmision` y usa el video de demostración.
+
 ## Diagrama de clases
 
 - [PlantUML editable](TP/Grupo9_POO_Diagramas_Pdf/fuentes/diagrama-de-clases.puml).
 - [SVG ampliable](TP/Grupo9_POO_Diagramas_Pdf/imagenes/diagrama-de-clases.svg).
 - [PNG](TP/Grupo9_POO_Diagramas_Pdf/imagenes/diagrama-de-clases.png).
+- [PDF](<TP/Grupo9_POO_Diagramas_Pdf/Diagrama de clases.pdf>).
 
 Los 94 tipos del código agrupados por paquete, con atributos, métodos, relaciones con nombre y cardinalidades. El resto de este documento describe el sistema tal como quedó en la iteración 4.
 
@@ -181,11 +192,11 @@ Las contraseñas nunca viajan al cliente.
 
 ## 7. Roles y permisos
 
-Sin cambios respecto de la iteración 3, salvo que se quitan guardar y cargar datos (ahora automáticos) y se agrega el calendario.
+Sin cambios respecto de la iteración 3, salvo que el administrador ya no solicita ingresos y que se quitan guardar y cargar datos (ahora automáticos) y se agrega el calendario.
 
 | Acción | Usuario | Artista | Administrador |
 |---|---|---|---|
-| Solicitar ingreso a un evento | Solo a su nombre | No | Sí |
+| Solicitar ingreso a un evento | Sí | No | No |
 | Ver eventos | Todos | Solo los propios | Todos |
 | Ver capacidad de un evento | Sí | Solo los propios | Sí |
 | Agregar un evento a mi calendario | Sí | Solo los propios | Sí |
@@ -281,6 +292,7 @@ Se generan con PlantUML. Los fuentes `.puml` están en `TP/Grupo9_POO_Diagramas_
 | Diagrama | Contenido |
 |---|---|
 | Diagrama de clases | Una sola página con todas las clases e interfaces agrupadas por paquete, con sus atributos, constructores y métodos no privados, relaciones con nombre, cardinalidades y líneas ortogonales (`diagrama-de-clases.puml`, también en `.svg` y `.png` en `imagenes`) |
+| Diagramas GRASP | Un diagrama por cada patrón GRASP, sobre el código actual |
 | Diagrama de secuencia | Tres páginas: solicitar ingreso con el gestor local, desde un cliente remoto y ver la transmisión de un evento |
 | Diagrama de base de datos | Las seis tablas con claves primarias y foráneas y cardinalidades |
 | Diagrama de despliegue | Qué corre en la PC del servidor y en la PC cliente, y cómo se conectan |
@@ -294,8 +306,6 @@ Cada relación lleva su nombre y, si es una asociación, su multiplicidad en cad
 ![Diagrama de despliegue](TP/Grupo9_POO_Diagramas_Pdf/imagenes/despliegue.png)
 
 ![Diagrama de secuencia de solicitar ingreso](TP/Grupo9_POO_Diagramas_Pdf/imagenes/secuencia-solicitar-ingreso.png)
-
-![Diagrama de secuencia de ver la transmisión](TP/Grupo9_POO_Diagramas_Pdf/imagenes/secuencia-transmision.png)
 
 Para regenerarlos, desde `TP/Grupo9_POO_Diagramas_Pdf/fuentes`:
 
